@@ -127,7 +127,8 @@ function end(t){clearInterval(gt);const used=S.used+(su()),um=Math.floor(used/60
  const txt=`${S.n}${S.c?'（'+S.c+'）':''} 在「数学星际远征·${PN}」得了 ${S.s} 分，答对 ${S.ok}/${Q.length} 题，最高连对 ${S.best}，用时约 ${um} 分钟！`;
  app.innerHTML=`<div class="card c"><div class="m">成绩单</div><h1>${S.n}</h1><div class="m">${S.c}</div><div class="big">${S.s}</div><div class="m">总分</div>
  <p style="font-size:22px;font-weight:700">${title}</p><p>答对 ${S.ok}/${Q.length} 题 · 最高连对 🔥${S.best}</p><p class="m">${t?'⏰ 时间到，已自动交卷（共作答 '+S.ans+' 题）':'用时约 '+um+' 分钟'}</p>
- <button class="btn" id="cp">📋 复制成绩发给老师</button><button class="btn" style="background:var(--ok)" id="re">再玩一次</button><p class="m" id="ms">也可以直接截图这个页面交给老师～</p></div>`;
+ <button class="btn" id="cp">📋 复制成绩发给老师</button><button class="btn" style="background:var(--ok)" id="re">再玩一次</button><p class="m" id="ms">也可以直接截图这个页面交给老师～
+ Hosted by Chew S.W. on Github Pages</p></div>`;
  document.getElementById('re').onclick=start;
  document.getElementById('cp').onclick=async()=>{try{await navigator.clipboard.writeText(txt);document.getElementById('ms').textContent='已复制！粘贴到群里即可 ✅'}catch(e){document.getElementById('ms').textContent=txt}};
 }

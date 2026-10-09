@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>数学星际远征 · 第一次</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#fff7e6;--card:#fff;--ink:#2b2a4c;--mut:#6b6a8a;--pri:#6c5ce7;--ok:#00b894;--bad:#e17055;--line:#e6dfc8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1a33;--card:#27264a;--ink:#f1f0ff;--mut:#a9a8cc;--line:#3a3966}}
+:root[data-theme="dark"]{--bg:#1b1a33;--card:#27264a;--ink:#f1f0ff;--mut:#a9a8cc;--line:#3a3966}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;min-height:100vh}
+.w{max-width:520px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:18px;margin-bottom:12px}
+h1{font-size:28px;margin:6px 0;text-align:center}
+.c{text-align:center}.m{color:var(--mut);font-size:14px}
+input{width:100%;font-size:18px;padding:12px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);margin:6px 0}
+button{font:inherit;cursor:pointer}
+.btn{width:100%;background:var(--pri);color:#fff;border:0;border-radius:14px;padding:14px;font-size:18px;font-weight:700;margin-top:8px}
+.btn:disabled{opacity:.4}
+.top{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:8px}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin-bottom:12px}
+.bar i{display:block;height:100%;background:var(--pri);transition:width .2s linear}
+#tb i{background:var(--ok)}
+.q{font-size:19px;line-height:1.55;font-weight:600;white-space:pre-line}
+.o{display:block;width:100%;text-align:left;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:14px;padding:14px;font-size:18px;margin-top:10px}
+.o.ok{background:var(--ok);color:#fff;border-color:var(--ok)}
+.o.bad{background:var(--bad);color:#fff;border-color:var(--bad)}
+.tag{display:inline-block;background:var(--pri);color:#fff;border-radius:20px;padding:2px 12px;font-size:13px}
+.ex{border-left:5px solid var(--pri);padding:6px 12px;margin-top:12px;line-height:1.6;white-space:pre-line}
+.big{font-size:56px;font-weight:800;color:var(--pri)}
+.pop{animation:p .35s}@keyframes p{50%{transform:scale(1.06)}}
+</style></head><body><div class="w" id="app"></div>
+<script>
+const QQ=[
+["热身赛","数目卡上的数是 3 909 009。用文字怎么写？","三百九十万九千零九",["三百九十万九百零九","三百九十万零九千零九","三百九万九千零九"],"3 909 009 = 390 万 + 9 009\n读作：三百九十万九千零九"],
+["热身赛","2⅔ ÷ 4 = ？","2/3",["1/3","1/6","3/2"],"2⅔ = 8/3\n8/3 ÷ 4 = 8/3 × 1/4 = 2/3"],
+["热身赛","3.14 × 6.9 = ？","21.666",["21.066","216.66","20.666"],"3.14 × 6.9 = 21.666\n小数位数：2 + 1 = 3 位"],
+["热身赛","比 320 少 26% 是多少？","236.8",["83.2","346.4","294"],"320 × 74% = 236.8\n（100% − 26% = 74%）"],
+["热身赛","奥地利维也纳在 +1 时区，加拿大渥太华在 −5 时区。两城市的时差是？","6 小时",["4 小时","5 小时","7 小时"],"+1 − (−5) = 6\n时差 6 小时"],
+["热身赛","洗衣机打 15% 折扣，方太太以 RM2 873 购买。原价是多少？","RM3 380",["RM3 304","RM2 442","RM3 000"],"现价是原价的 85%\n2 873 ÷ 85 × 100 = RM3 380"],
+["热身赛","一套沙发成本 RM1 885，每套盈利 RM678。售价是多少？","RM2 563",["RM1 207","RM2 553","RM3 563"],"售价 = 成本 + 盈利\n1 885 + 678 = RM2 563"],
+["热身赛","650 mℓ 蔬菜汤需要 2 g 盐。妈妈准备了 5.2 ℓ 蔬菜汤，需要多少 g 盐？","16 g",["8 g","10.4 g","20 g"],"5.2 ℓ = 5 200 mℓ\n5 200 ÷ 650 = 8\n8 × 2 = 16 g"],
+["热身赛","篮球的直径是 24 cm。它的半径是多少 cm？","12 cm",["24 cm","48 cm","6 cm"],"半径 = 直径 ÷ 2\n24 ÷ 2 = 12 cm",["ball"]],
+["热身赛","看下面的地图。比例尺 1 : 100 000，即地图上 1 cm（1 格）代表实际 1 km。沿着格线（先横后直）计算距离。\n从炜妤的家到书局的实际距离是多少？","9 km",["7 km","5 km","10 km"],"横向 6 − 2 = 4 格，纵向 6 − 1 = 5 格\n(4 + 5) × 1 km = 9 km",["map",["炜妤的家","书局"]]],
+["热身赛","看下面的地图。比例尺 1 : 100 000，即地图上 1 cm（1 格）代表实际 1 km。沿着格线（先横后直）计算距离。\n从医院到药剂店的实际距离是多少？","9 km",["7 km","6 km","3 km"],"横向 8 − 2 = 6 格，纵向 5 − 2 = 3 格\n(6 + 3) × 1 km = 9 km",["map",["医院","药剂店"]]],
+["热身赛","看下面的地图。比例尺 1 : 100 000，即地图上 1 cm（1 格）代表实际 1 km。沿着格线（先横后直）计算距离。\n从书局到医院的实际距离是多少？","7 km",["9 km","6 km","1 km"],"横向 8 − 2 = 6 格，纵向 6 − 5 = 1 格\n(6 + 1) × 1 km = 7 km",["map",["书局","医院"]]],
+["进阶赛","黎老板买了 54 盆兰花，石斛兰与文心兰的数量比是 5 : 4。石斛兰有多少盆？","30 盆",["24 盆","20 盆","36 盆"],"5 + 4 = 9 份\n54 ÷ 9 = 6\n6 × 5 = 30 盆"],
+["进阶赛","正六边形周长 90 cm，正方形周长 72 cm。正六边形与正方形边长的最简比是？","5 : 6",["6 : 5","90 : 72","4 : 5"],"六边形边长 90 ÷ 6 = 15\n正方形边长 72 ÷ 4 = 18\n15 : 18 = 5 : 6",["shp"]],
+["进阶赛","袋子里有 7 个蓝色玻璃球和 5 个白色玻璃球。茗桦从袋子里抽出一个玻璃球，抽到蓝色玻璃球的可能性是什么？","可能性大",["可能性小","不可能","一定"],"蓝色 7 个比白色 5 个多\n所以抽到蓝色的可能性大",["bag"]],
+["进阶赛","袋子里只有蓝色和白色玻璃球，没有绿色玻璃球。茗桦抽出一个玻璃球，抽到绿色玻璃球的可能性是什么？","不可能",["可能性小","可能性大","一定"],"袋子里没有绿色玻璃球\n所以不可能",["bag"]],
+["进阶赛","叶先生有两个相同的容器。南瓜小米豆浆 5 升，水位 11.5 cm；红豆薏仁豆浆水位 23 cm。红豆薏仁豆浆有多少升？","10 升",["11.5 升","5 升","23 升"],"23 ÷ 11.5 = 2 倍\n5 × 2 = 10 升",["tube"]],
+["挑战赛","一杯南瓜小米豆浆成本 RM4.20，售价 RM8.80。卖 280 杯后，盈利会多于 RM1 295。这项说明正确吗？","不正确，盈利 RM1 288",["正确，盈利 RM1 300","不正确，盈利 RM1 176","正确，盈利 RM2 464"],"每杯盈利 8.80 − 4.20 = RM4.60\n280 × 4.60 = RM1 288\n1 288 < 1 295，所以不正确"],
+["挑战赛","看下面的地图：叶先生从工厂往横走 7 km，往直走 2 km。他能到达吗？","不能，纵向需走 3 km，只走了 2 km",["能，刚好到达","不能，横向需走 8 km","能，总共走了 9 km"],"横向：8 − 1 = 7 km ✓\n纵向：6 − 3 = 3 km，但只走了 2 km\n所以不能到达",["fac"]],
+["挑战赛","看下面的饼分图（叶先生在美食嘉年华 4 天的收入）。星期四至星期六的平均收入是 RM1 550。4 天的平均收入是多少？","RM2 325",["RM1 550","RM3 100","RM9 300"],"星期四至六共 180°，3 天总收入 1 550 × 3 = 4 650\n180° → 4 650，360° → 9 300\n9 300 ÷ 4 = RM2 325",["pie"]],
+["挑战赛","分发到城市 M 的手册有 2⅜ 百万份，N 有 1.38 百万份。N 的数量是 M 与 P 总数的一半。P 有多少份？","385 000 份",["3 850 000 份","1 375 000 份","485 000 份"],"M + P = 1.38 × 2 = 2.76 百万\n2⅜ = 2.375\nP = 2.76 − 2.375 = 0.385 百万 = 385 000"],
+["挑战赛","新山时间比加德满都早 2 小时 15 分钟。刘先生在新山时间 12:05 来电，加德满都的当地时间是？","9:50 a.m.",["2:20 p.m.","9:20 a.m.","10:50 a.m."],"加德满都比新山慢\n12:05 − 2 小时 15 分 = 9:50 a.m."],
+["挑战赛","达尔文时间比新山早 1 小时 30 分钟。刘先生于新山时间 3:45 p.m. 来电，通话 1 小时 25 分钟。说法「通话在达尔文时间 6:40 p.m. 结束」正确吗？","正确",["不正确，应是 5:10 p.m.","不正确，应是 3:40 p.m.","不正确，应是 7:10 p.m."],"新山结束时间：3:45 + 1:25 = 5:10 p.m.\n达尔文早 1 小时 30 分：5:10 + 1:30 = 6:40 p.m.\n所以说法正确"],
+["挑战赛","工作人员中，华裔 56 人，印裔 4 人。华裔人数与总数的比是 7 : 9。外籍工作人员有多少人？","12 人",["16 人","8 人","72 人"],"7 份 = 56，1 份 = 8\n总数 9 × 8 = 72\n72 − 56 − 4 = 12 人"]
+];
+
+const PART=1;const Q=PART==1?QQ.slice(0,12):QQ.slice(12),PN=PART==1?'第一次':'第二次';
+const TX='font-size:13px;fill:#2b2a4c;font-family:inherit',TW='font-size:13px;fill:var(--ink);font-family:inherit';
+const svg=(w,h,b)=>`<svg viewBox="0 0 ${w} ${h}" style="width:100%;max-width:420px;display:block;margin:10px auto">${b}</svg>`;
+function grid(pts,hl,mY){const c=36,ox=34,oy=mY*c+14,W=ox+8*c+24,H=oy+30;let b='';
+ for(let x=0;x<=8;x++){b+=`<line x1="${ox+x*c}" y1="${oy}" x2="${ox+x*c}" y2="${oy-mY*c}" style="stroke:var(--line);stroke-width:1.5"/>`+(x?`<text x="${ox+x*c}" y="${oy+16}" text-anchor="middle" style="${TW}">${x}</text>`:'')}
+ for(let y=0;y<=mY;y++){b+=`<line x1="${ox}" y1="${oy-y*c}" x2="${ox+8*c}" y2="${oy-y*c}" style="stroke:var(--line);stroke-width:1.5"/>`+(y?`<text x="${ox-8}" y="${oy-y*c+4}" text-anchor="end" style="${TW}">${y}</text>`:'')}
+ b+=`<text x="${ox-8}" y="${oy+16}" text-anchor="end" style="${TW}">O</text><text x="${W-4}" y="${oy+16}" style="${TW}">x</text><text x="${ox-8}" y="${oy-mY*c-4}" text-anchor="end" style="${TW}">y</text>`;
+ pts.forEach(([n,x,y])=>{const px=ox+x*c,py=oy-y*c,e=x>=7,h=hl&&hl.includes(n);b+=`<circle cx="${px}" cy="${py}" r="${h?7:5}" style="fill:${h?'#e17055':'var(--ink)'}"/><text x="${px+(e?-9:9)}" y="${py-9}" text-anchor="${e?'end':'start'}" style="${TW};font-weight:700">${n}</text>`});
+ return svg(W,H,b)}
+function pie(){const cx=110,cy=105,r=90,P=a=>[cx+r*Math.sin(a*Math.PI/180),cy-r*Math.cos(a*Math.PI/180)];
+ const S=[['星期四',0,45,'#fdcb6e'],['星期五',45,135,'#a29bfe'],['星期六',135,180,'#55efc4'],['星期日',180,360,'#74b9ff']];let b='';
+ S.forEach(([n,a,z,f])=>{const [x1,y1]=P(a),[x2,y2]=P(z),m=(a+z)/2,t=[cx+r*.62*Math.sin(m*Math.PI/180),cy-r*.62*Math.cos(m*Math.PI/180)];
+  b+=`<path d="M${cx} ${cy}L${x1} ${y1}A${r} ${r} 0 ${z-a>180?1:0} 1 ${x2} ${y2}Z" style="fill:${f};stroke:#fff;stroke-width:2"/><text x="${t[0]}" y="${t[1]-2}" text-anchor="middle" style="${TX};font-weight:700">${n}</text><text x="${t[0]}" y="${t[1]+13}" text-anchor="middle" style="${TX}">${z-a}°</text>`});
+ return svg(220,210,b)}
+function bag(bl,wh){let b=`<ellipse cx="110" cy="90" rx="85" ry="68" style="fill:none;stroke:var(--mut);stroke-width:3"/><path d="M95 24L110 8L125 24" style="fill:none;stroke:var(--mut);stroke-width:3"/>`;
+ const pos=[[70,60],[100,52],[130,56],[155,70],[60,92],[90,86],[120,90],[150,100],[75,122],[105,120],[135,125],[110,60]];
+ for(let i=0;i<12;i++){const [x,y]=pos[i],blue=i<bl;b+=`<circle cx="${x}" cy="${y}" r="14" style="fill:${blue?'#4a90e2':'#fff'};stroke:${blue?'#2b6cb0':'#888'};stroke-width:2"/>`}
+ return svg(220,170,b)}
+function tube(){const t=(x,hh,l1,l2,n)=>`<rect x="${x}" y="20" width="70" height="140" style="fill:none;stroke:var(--ink);stroke-width:2.5"/><rect x="${x}" y="${160-hh}" width="70" height="${hh}" style="fill:#fdcb6e"/><text x="${x+35}" y="${160-hh/2+4}" text-anchor="middle" style="${TX};font-weight:700">${l1}</text><text x="${x+80}" y="${160-hh/2+4}" style="${TW}">${l2}</text><text x="${x+35}" y="180" text-anchor="middle" style="${TW}">${n}</text>`;
+ return svg(300,190,t(20,46,'5 升','11.5 cm','南瓜小米豆浆')+t(170,92,'? 升','23 cm','红豆薏仁豆浆')).replace('width:100%','width:100%')}
+function ball(){return svg(220,160,`<circle cx="110" cy="70" r="55" style="fill:#fab1a0;stroke:var(--ink);stroke-width:3"/><path d="M110 15V125M55 70H165" style="stroke:var(--ink);stroke-width:2;fill:none"/><line x1="55" y1="140" x2="165" y2="140" style="stroke:var(--ink);stroke-width:2"/><text x="110" y="156" text-anchor="middle" style="${TW};font-weight:700">24 cm（直径）</text>`)}
+function shp(){return svg(320,190,`<polygon points="85,20 125,20 150,65 125,110 85,110 60,65" style="fill:#a29bfe55;stroke:var(--ink);stroke-width:2.5"/><text x="105" y="140" text-anchor="middle" style="${TW};font-weight:700">正六边形</text><text x="105" y="160" text-anchor="middle" style="${TW}">周长 90 cm</text><rect x="195" y="20" width="90" height="90" style="fill:#55efc455;stroke:var(--ink);stroke-width:2.5"/><text x="240" y="140" text-anchor="middle" style="${TW};font-weight:700">正方形</text><text x="240" y="160" text-anchor="middle" style="${TW}">周长 72 cm</text>`)}
+const MP=[['书局',2,6],['医院',8,5],['药剂店',2,2],['炜妤的家',6,1]];
+function vis(v){if(!v)return'';const k=v[0];
+ return k=='map'?grid(MP,v[1],7)+'<div class="m c">比例尺 1 : 100 000（1 格 = 1 cm）</div>':
+ k=='fac'?grid([['美食嘉年华',1,6],['叶先生的工厂',8,3]],null,7)+'<div class="m c">比例尺：1 格 = 1 km</div>':
+ k=='pie'?pie():k=='bag'?bag(7,5):k=='tube'?tube():k=='ball'?ball():k=='shp'?shp():''}
+const STG=PART==1?600:1200,app=document.getElementById('app');
+let S;
+const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+function start(){
+ app.innerHTML=`<div class="c"><div style="font-size:64px">🚀</div><h1>数学星际远征</h1><p class="m">${PN}任务 · 共 ${Q.length} 关 · 限时 ${STG/60} 分钟，答得越准分数越高！</p></div>
+ <div class="card"><b>你的名字</b><input id="nm" maxlength="12" placeholder="例如：小明"><b>班级 / 座号</b><input id="cl" maxlength="12" placeholder="例如：六年级 A · 15号">
+ <button class="btn" id="go">出发！</button></div>
+ <div class="card m">规则：${PN}共 ${Q.length} 题，限时 ${STG/60} 分钟，慢慢想、认真算！答对 +100 分，连续答对每次再 +10（最多 +50）。时间到会自动交卷。选好答案后按「确认」才算提交，提交后不能修改，会显示对或错，但不显示答案。</div>`;
+ document.getElementById('go').onclick=()=>{
+  const n=document.getElementById('nm').value.trim();if(!n){document.getElementById('nm').focus();return}
+  S={n,c:document.getElementById('cl').value.trim(),i:0,s:0,k:0,ok:0,best:0,end:Date.now()+STG*1000,stage:1,used:0,ans:0};clearInterval(gt);gt=setInterval(tick,500);next()}
+}
+let gt;
+function fmt(){const t=Math.max(0,Math.ceil((S.end-Date.now())/1000));return String(t/60|0).padStart(2,'0')+':'+String(t%60).padStart(2,'0')}
+function tick(){const e=document.getElementById('ck');if(e)e.textContent=fmt();if(Date.now()>=S.end){clearInterval(gt);end(true)}}
+const su=()=>Math.min(STG,Math.round(STG-(S.end-Date.now())/1000)),first2=()=>Q.findIndex(q=>q[0]=='挑战赛');
+function brk(t){clearInterval(gt);S.used=su();S.i=first2();S.stage=2;const n=Q.length-S.i;
+ app.innerHTML=`<div class="card c"><div style="font-size:56px">☕</div><h1>第一阶段${t?'时间到':'完成'}！</h1><p>目前得分 <b>⭐ ${S.s}</b>　答对 ${S.ok} 题</p><p class="m">休息一下，准备好再开始。<br>第二阶段「挑战赛」共 ${n} 题，限时 ${STG/60} 分钟。<br>点击按钮后才开始计时。</p><button class="btn" id="s2">开始第二阶段 🚀</button></div>`;
+ document.getElementById('s2').onclick=()=>{S.end=Date.now()+STG*1000;clearInterval(gt);gt=setInterval(tick,500);next()}}
+function next(){
+ if(S.i>=Q.length)return end();
+ const q=Q[S.i],opts=sh([q[2],...q[3]]);S.done=false;S.sel=null;
+ app.innerHTML=`<div class="top"><span>${PN} · 第 ${S.i+1}/${Q.length} 关</span><span>⏱ <b id="ck">${fmt()}</b>　⭐ <span id="sc">${S.s}</span>　🔥${S.k}</span></div>
+ <div class="bar"><i style="width:${(S.i/Q.length)*100}%"></i></div>
+ <div class="card"><span class="tag">${q[0]}</span><div class="q">${q[1]}</div>${vis(q[5])}
+ ${opts.map(o=>`<button class="o">${o}</button>`).join('')}<button class="btn" id="cf" disabled>确认答案</button></div>`;
+ const bs=[...app.querySelectorAll('.o')],cf=document.getElementById('cf');
+ bs.forEach(b=>b.onclick=()=>{bs.forEach(x=>x.style.cssText='');b.style.cssText='background:var(--pri);color:#fff;border-color:var(--pri)';S.sel=b.textContent;cf.disabled=false});
+ cf.onclick=()=>{if(S.done)return;S.done=true;S.ans++;const ok=S.sel===q[2];let g=0;
+  if(ok){S.k++;S.ok++;S.best=Math.max(S.best,S.k);g=100+Math.min(S.k-1,5)*10;S.s+=g}else S.k=0;
+  bs.forEach(x=>{x.disabled=true;if(x.textContent===S.sel){x.style.cssText='';x.classList.add(ok?'ok':'bad')}});
+  document.getElementById('sc').textContent=S.s;
+  cf.insertAdjacentHTML('beforebegin',`<div class="pop c" style="font-size:20px;font-weight:700;margin-top:12px;color:var(--${ok?'ok':'bad'})">${ok?'🎉 答对了！ +'+g+' 分':'😅 答错了'}</div>`);
+  cf.textContent=S.i+1<Q.length?'下一关 ➜':'查看成绩 🏆';
+  cf.onclick=()=>{S.i++;window.scrollTo(0,0);next()};
+ };
+}
+function end(t){clearInterval(gt);const used=S.used+(su()),um=Math.floor(used/60);
+ const p=S.ok/Q.length,title=p>=.9?'🌟 银河数学大师':p>=.7?'🚀 星际飞行员':p>=.5?'🛰️ 太空探险家':'🌍 地球见习生';
+ const txt=`${S.n}${S.c?'（'+S.c+'）':''} 在「数学星际远征·${PN}」得了 ${S.s} 分，答对 ${S.ok}/${Q.length} 题，最高连对 ${S.best}，用时约 ${um} 分钟！`;
+ app.innerHTML=`<div class="card c"><div class="m">成绩单</div><h1>${S.n}</h1><div class="m">${S.c}</div><div class="big">${S.s}</div><div class="m">总分</div>
+ <p style="font-size:22px;font-weight:700">${title}</p><p>答对 ${S.ok}/${Q.length} 题 · 最高连对 🔥${S.best}</p><p class="m">${t?'⏰ 时间到，已自动交卷（共作答 '+S.ans+' 题）':'用时约 '+um+' 分钟'}</p>
+ <button class="btn" id="cp">📋 复制成绩发给老师</button><button class="btn" style="background:var(--ok)" id="re">再玩一次</button><p class="m" id="ms">也可以直接截图这个页面交给老师～</p></div>`;
+ document.getElementById('re').onclick=start;
+ document.getElementById('cp').onclick=async()=>{try{await navigator.clipboard.writeText(txt);document.getElementById('ms').textContent='已复制！粘贴到群里即可 ✅'}catch(e){document.getElementById('ms').textContent=txt}};
+}
+start();
+</script></body></html>
